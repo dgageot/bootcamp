@@ -1,6 +1,7 @@
 package com.retour1024;
 
 import com.retour1024.helpers.PhantomJsDownloader;
+import com.retour1024.model.LinesDao;
 import org.fluentlenium.adapter.FluentTest;
 import org.fluentlenium.core.annotation.Page;
 import org.fluentlenium.core.domain.FluentList;
@@ -20,7 +21,7 @@ public class PaginationTest extends FluentTest {
   private WebServer server;
 
   @Page
-  public PaginationPage page;
+  public IndexPage indexPage;
 
   @Override
   public WebDriver getDefaultDriver() {
@@ -44,9 +45,9 @@ public class PaginationTest extends FluentTest {
     server = new WebServer(PORT);
     server.start();
 
-    page.go();
+    indexPage.go();
 
-    FluentList<FluentWebElement> links = page.links();
+    FluentList<FluentWebElement> links = indexPage.links();
     assertThat(links).hasSize(8);
     assertThat(links.get(0)).hasText("1");
     assertThat(links.get(1)).hasText("2");
@@ -63,10 +64,10 @@ public class PaginationTest extends FluentTest {
     server = new WebServer(PORT);
     server.start();
 
-    page.go();
-    page.clickLinkForPage(2);
+    indexPage.go();
+    indexPage.clickLinkForPage(2);
 
-    FluentList<FluentWebElement> links = page.links();
+    FluentList<FluentWebElement> links = indexPage.links();
     assertThat(links).hasSize(9);
     assertThat(links.get(0)).hasText("Previous");
     assertThat(links.get(1)).hasText("1");
@@ -84,10 +85,10 @@ public class PaginationTest extends FluentTest {
     server = new WebServer(PORT);
     server.start();
 
-    page.go();
-    page.clickLinkForPage(5);
+    indexPage.go();
+    indexPage.clickLinkForPage(5);
 
-    FluentList<FluentWebElement> links = page.links();
+    FluentList<FluentWebElement> links = indexPage.links();
     assertThat(links).hasSize(11);
     assertThat(links.get(0)).hasText("Previous");
     assertThat(links.get(1)).hasText("1");
@@ -107,10 +108,10 @@ public class PaginationTest extends FluentTest {
     server = new WebServer(PORT);
     server.start();
 
-    page.go();
-    page.clickLinkForPage(80);
+    indexPage.go();
+    indexPage.clickLinkForPage(80);
 
-    FluentList<FluentWebElement> links = page.links();
+    FluentList<FluentWebElement> links = indexPage.links();
     assertThat(links).hasSize(8);
     assertThat(links.get(0)).hasText("Previous");
     assertThat(links.get(1)).hasText("1");
@@ -125,12 +126,13 @@ public class PaginationTest extends FluentTest {
   @Test
   public void should_show_links_for_page_1_out_of_1() throws IOException {
     server = new WebServer(PORT);
-    server.getLinesRepository().insert(Arrays.asList("1"));
+    LinesDao linesDao = server.getLinesDao();
+    linesDao.insert(Arrays.asList("1"));
     server.start();
 
-    page.go();
+    indexPage.go();
 
-    FluentList<FluentWebElement> links = page.links();
+    FluentList<FluentWebElement> links = indexPage.links();
     assertThat(links).hasSize(1);
     assertThat(links.get(0)).hasText("1");
   }
@@ -138,13 +140,13 @@ public class PaginationTest extends FluentTest {
   @Test
   public void should_show_links_for_page_2_out_of_2() throws IOException {
     server = new WebServer(PORT);
-    server.getLinesRepository().insert(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"));
+    server.getLinesDao().insert(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"));
     server.start();
 
-    page.go();
-    page.clickLinkForPage(2);
+    indexPage.go();
+    indexPage.clickLinkForPage(2);
 
-    FluentList<FluentWebElement> links = page.links();
+    FluentList<FluentWebElement> links = indexPage.links();
     assertThat(links).hasSize(3);
     assertThat(links.get(0)).hasText("Previous");
     assertThat(links.get(1)).hasText("1");

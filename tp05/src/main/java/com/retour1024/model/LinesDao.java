@@ -6,7 +6,7 @@ import com.google.inject.Singleton;
 import java.util.List;
 
 @Singleton
-public class LinesRepository {
+public class LinesDao {
   private static final int DEFAULT_LINE_COUNT = 800;
 
   private List<String> lines;

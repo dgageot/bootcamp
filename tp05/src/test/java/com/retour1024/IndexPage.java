@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.fluentlenium.core.filter.FilterConstructor.withText;
 
-public class PaginationPage extends FluentPage {
+public class IndexPage extends FluentPage {
   FluentWebElement pagination;
 
   @Override

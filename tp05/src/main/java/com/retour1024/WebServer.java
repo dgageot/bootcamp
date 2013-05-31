@@ -7,7 +7,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import com.retour1024.model.LinesRepository;
+import com.retour1024.model.LinesDao;
 import com.retour1024.pagination.Page;
 import com.retour1024.pagination.PageFactory;
 import com.sun.net.httpserver.HttpExchange;
@@ -19,7 +19,7 @@ import java.net.InetSocketAddress;
 
 public class WebServer implements HttpHandler {
   private final PageFactory pageFactory;
-  private final LinesRepository linesRepository;
+  private final LinesDao linesDao;
   private final int port;
   private HttpServer server;
 
@@ -32,7 +32,7 @@ public class WebServer implements HttpHandler {
 
     Injector injector = createInjector(modules);
     pageFactory = injector.getInstance(PageFactory.class);
-    linesRepository = injector.getInstance(LinesRepository.class);
+    linesDao = injector.getInstance(LinesDao.class);
   }
 
   private static Injector createInjector(Module... override) {
@@ -55,8 +55,8 @@ public class WebServer implements HttpHandler {
   }
 
   @VisibleForTesting
-  public LinesRepository getLinesRepository() {
-    return linesRepository;
+  public LinesDao getLinesDao() {
+    return linesDao;
   }
 
   @Override

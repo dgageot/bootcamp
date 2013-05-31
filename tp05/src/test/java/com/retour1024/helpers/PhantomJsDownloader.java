@@ -46,15 +46,17 @@ public class PhantomJsDownloader {
     if (isWindows) {
       url = "http://phantomjs.googlecode.com/files/phantomjs-1.8.1-windows.zip";
       phantomJsExe = new File(installDir, "phantomjs-1.8.1-windows/phantomjs.exe");
+      extractExe(url, installDir, phantomJsExe);
     } else if (isMac) {
       url = "http://phantomjs.googlecode.com/files/phantomjs-1.8.1-macosx.zip";
       phantomJsExe = new File(installDir, "phantomjs-1.8.1-macosx/bin/phantomjs");
+      extractExe(url, installDir, phantomJsExe);
     } else {
       url = "http://phantomjs.googlecode.com/files/phantomjs-1.8.1-linux-x86_64.tar.bz2";
       phantomJsExe = new File(installDir, "phantomjs-1.8.1-linux-x86_64/bin/phantomjs");
+      extractExe(url, installDir, phantomJsExe);
     }
 
-    extractExe(url, installDir, phantomJsExe);
 
     return phantomJsExe;
   }
@@ -64,7 +66,10 @@ public class PhantomJsDownloader {
       return;
     }
 
-    File targetZip = new File(phantomInstallDir, "phantomjs.zip");
+    int lastSlash = url.lastIndexOf('/');
+    String name = url.substring(lastSlash + 1);
+
+    File targetZip = new File(phantomInstallDir, name);
     downloadZip(url, targetZip);
 
     System.out.println("Extracting phantomjs");
@@ -72,10 +77,9 @@ public class PhantomJsDownloader {
       if (isWindows) {
         unzip(targetZip, phantomInstallDir);
       } else if (isMac) {
-        new ProcessBuilder().command("/usr/bin/unzip", "-qo", "phantomjs.zip").directory(phantomInstallDir).start().waitFor();
+        new ProcessBuilder().command("/usr/bin/unzip", "-qo", name).directory(phantomInstallDir).start().waitFor();
       } else {
-        new ProcessBuilder().command("mv", "phantomjs.zip", "phantomjs.tar.bz2").directory(phantomInstallDir).start().waitFor();
-        new ProcessBuilder().command("/usr/bin/tar", "-xjvf", "phantomjs.tar.bz2").directory(phantomInstallDir).start().waitFor();
+        new ProcessBuilder().command("/usr/bin/tar", "-xjvf", name).directory(phantomInstallDir).start().waitFor();
       }
     } catch (Exception e) {
       throw new IllegalStateException("Unable to unzip phantomjs from " + targetZip.getAbsolutePath());

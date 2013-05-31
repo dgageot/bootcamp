@@ -4,7 +4,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.retour1024.model.LinesRepository;
+import com.retour1024.model.LinesDao;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import java.util.List;
 public class PageFactory {
   private static final int PER_PAGE = 10;
 
-  private final LinesRepository linesRepository;
+  private final LinesDao linesDao;
 
   @Inject
-  public PageFactory(LinesRepository linesRepository) {
-    this.linesRepository = linesRepository;
+  public PageFactory(LinesDao linesDao) {
+    this.linesDao = linesDao;
   }
 
   public Page page(int pageIndex) {
@@ -24,14 +24,14 @@ public class PageFactory {
   }
 
   private List<String> lines(int pageIndex) {
-    Iterable<List<String>> pages = Iterables.partition(linesRepository.findAll(), PER_PAGE);
+    Iterable<List<String>> pages = Iterables.partition(linesDao.findAll(), PER_PAGE);
     return Iterables.get(pages, pageIndex - 1);
   }
 
   private List<Link> links(int pageIndex) {
     List<Link> links = Lists.newArrayList();
 
-    Pagination pagination = new Pagination(pageIndex, (linesRepository.count() + PER_PAGE - 1) / PER_PAGE);
+    Pagination pagination = new Pagination(pageIndex, (linesDao.count() + PER_PAGE - 1) / PER_PAGE);
 
     if (pagination.getHasPrevious()) {
       links.add(new Link("Previous", pageIndex - 1, false));
