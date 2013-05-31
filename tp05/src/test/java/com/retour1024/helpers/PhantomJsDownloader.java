@@ -74,7 +74,8 @@ public class PhantomJsDownloader {
       } else if (isMac) {
         new ProcessBuilder().command("/usr/bin/unzip", "-qo", "phantomjs.zip").directory(phantomInstallDir).start().waitFor();
       } else {
-        new ProcessBuilder().command("/usr/bin/tar", "-xjvf", "phantomjs.zip").directory(phantomInstallDir).start().waitFor();
+        new ProcessBuilder().command("mv", "phantomjs.zip", "phantomjs.tar.bz2").directory(phantomInstallDir).start().waitFor();
+        new ProcessBuilder().command("/usr/bin/tar", "-xjvf", "phantomjs.tar.bz2").directory(phantomInstallDir).start().waitFor();
       }
     } catch (Exception e) {
       throw new IllegalStateException("Unable to unzip phantomjs from " + targetZip.getAbsolutePath());
