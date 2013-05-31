@@ -7,7 +7,6 @@ Hi and welcome to team Gilded Rose. As you know, we are a small inn with a prime
 Your tasks are to :
 
 * Add the new feature to our system so that we can begin selling a new category of items.
-* Present the system as a web application so that we can take orders worldwide.
 
 First an introduction to our system:
 
