@@ -1,16 +1,10 @@
 package com.retour1024;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class PersonsTest {
   public static final String BOB = "BOB";
@@ -113,29 +107,29 @@ public class PersonsTest {
     }
   }
 
-	/**
-	 * Test de tri par age.
-	 */
-	@Test
-	public void testSortByName() {
-		// Given
-		final Persons persons = new Persons();
+  /**
+   * Test de tri par age.
+   */
+  @Test
+  public void testSortByName() {
+    // Given
+    final Persons persons = new Persons();
 
-		// When
-		persons.add(new Person("Person4", 1));
-		persons.add(new Person("Person2", 2));
-		persons.add(new Person("Person1", 3));
-		persons.add(new Person("Person5", 4));
-		persons.add(new Person("Person3", 5));
-		final List<Person> list = persons.listByName();
+    // When
+    persons.add(new Person("Person4", 1));
+    persons.add(new Person("Person2", 2));
+    persons.add(new Person("Person1", 3));
+    persons.add(new Person("Person5", 4));
+    persons.add(new Person("Person3", 5));
+    final List<Person> list = persons.listByName();
 
-		// Then
-		Assert.assertNotNull(list);
-		Assert.assertEquals(5, list.size());
-		for (int i = 1; i <= 5; i++) {
-			Assert.assertEquals("Person" + i, list.get(i - 1).getName());
-		}
-	}
+    // Then
+    Assert.assertNotNull(list);
+    Assert.assertEquals(5, list.size());
+    for (int i = 1; i <= 5; i++) {
+      Assert.assertEquals("Person" + i, list.get(i - 1).getName());
+    }
+  }
 
   // Error2
   @Test
@@ -190,24 +184,24 @@ public class PersonsTest {
     Assert.assertEquals(BOB + SLASH + "55555", list.get(4).getName());
   }
 
-    // Error
-    @Test
-    public void shouldFailWithNullComparator() throws NullPointerException {
-        // GIVEN
-        persons.add(new Person(BOB + SLASH + "1", 1));
-        persons.add(new Person(BOB + SLASH + "55555", 2));
-        persons.add(new Person(BOB + SLASH + "333", 3));
-        persons.add(new Person(BOB + SLASH + "4444", 4));
-        persons.add(new Person(BOB + SLASH + "22", 5));
+  // Error
+  @Test
+  public void shouldFailWithNullComparator() throws NullPointerException {
+    // GIVEN
+    persons.add(new Person(BOB + SLASH + "1", 1));
+    persons.add(new Person(BOB + SLASH + "55555", 2));
+    persons.add(new Person(BOB + SLASH + "333", 3));
+    persons.add(new Person(BOB + SLASH + "4444", 4));
+    persons.add(new Person(BOB + SLASH + "22", 5));
 
-        // WHEN
-        try {
-            final List<Person> list = persons.listBy(null);
-            Assert.fail("should fail");
-        } catch (NullPointerException e) {
-            // OK
-        }
+    // WHEN
+    try {
+      final List<Person> list = persons.listBy(null);
+      Assert.fail("should fail");
+    } catch (NullPointerException e) {
+      // OK
     }
+  }
 
   @Test
   public void asMap() {

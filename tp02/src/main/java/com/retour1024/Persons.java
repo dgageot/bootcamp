@@ -1,11 +1,10 @@
 package com.retour1024;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Ordering;
+import com.google.common.collect.*;
 
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 public class Persons {
   private static final Comparator<Person> BY_AGE = Ordering.natural().onResultOf(Person.TO_AGE);

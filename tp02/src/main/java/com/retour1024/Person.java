@@ -1,6 +1,6 @@
 package com.retour1024;
 
-import com.google.common.base.Function;
+import com.google.common.base.*;
 
 public class Person {
   private final String name;
