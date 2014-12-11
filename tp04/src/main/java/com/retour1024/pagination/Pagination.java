@@ -1,7 +1,6 @@
 package com.retour1024.pagination;
 
-import com.google.common.collect.Lists;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class Pagination {
@@ -18,7 +17,7 @@ public class Pagination {
   }
 
   public List<Integer> getPreviousPages() {
-    List<Integer> pages = Lists.newArrayList();
+    List<Integer> pages = new ArrayList<>();
     if (page > 1) {
       pages.add(1);
     }
@@ -30,7 +29,7 @@ public class Pagination {
   }
 
   public List<Integer> getPagesBefore() {
-    List<Integer> pages = Lists.newArrayList();
+    List<Integer> pages = new ArrayList<>();
     if ((page > 5) && (page > numberOfPages - 1)) {
       pages.add(page - 4);
     }
@@ -47,7 +46,7 @@ public class Pagination {
   }
 
   public List<Integer> getPagesAfter() {
-    List<Integer> pages = Lists.newArrayList();
+    List<Integer> pages = new ArrayList<>();
     if (page <= numberOfPages - 1) {
       pages.add(page + 1);
     }
@@ -68,7 +67,7 @@ public class Pagination {
   }
 
   public List<Integer> getNextPages() {
-    List<Integer> pages = Lists.newArrayList();
+    List<Integer> pages = new ArrayList<>();
     if ((page < numberOfPages - 2) && (numberOfPages > 5)) {
       pages.add(numberOfPages);
     }

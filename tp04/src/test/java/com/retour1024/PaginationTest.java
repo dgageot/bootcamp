@@ -1,32 +1,21 @@
 package com.retour1024;
 
-import com.retour1024.helpers.PhantomJsDownloader;
-import com.retour1024.model.LinesDao;
-import org.fluentlenium.adapter.FluentTest;
-import org.fluentlenium.core.annotation.Page;
-import org.fluentlenium.core.domain.FluentList;
-import org.fluentlenium.core.domain.FluentWebElement;
+import com.retour1024.pagination.LinesDao;
+import net.codestory.http.Configuration;
+import net.codestory.http.WebServer;
+import net.codestory.http.injection.Singletons;
+import net.codestory.simplelenium.SeleniumTest;
 import org.junit.After;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 
-import java.io.IOException;
 import java.util.Arrays;
 
-import static org.fest.assertions.fluentlenium.FluentLeniumAssertions.assertThat;
+import static net.codestory.http.Configuration.override;
 
-public class PaginationTest extends FluentTest {
+public class PaginationTest extends SeleniumTest {
   public static final int PORT = 9999;
 
   private WebServer server;
-
-  @Page
-  public IndexPage indexPage;
-
-  @Override
-  public WebDriver getDefaultDriver() {
-    return new PhantomJsDownloader().createDriver();
-  }
 
   @Override
   public String getDefaultBaseUrl() {
@@ -40,116 +29,115 @@ public class PaginationTest extends FluentTest {
     }
   }
 
-  @Test
-  public void should_show_links_for_page_1() throws IOException {
-    server = new WebServer(PORT);
-    server.start();
-
-    indexPage.go();
-
-    FluentList<FluentWebElement> links = indexPage.links();
-    assertThat(links).hasSize(8);
-    assertThat(links.get(0)).hasText("1");
-    assertThat(links.get(1)).hasText("2");
-    assertThat(links.get(2)).hasText("3");
-    assertThat(links.get(3)).hasText("4");
-    assertThat(links.get(4)).hasText("5");
-    assertThat(links.get(5)).hasText("...");
-    assertThat(links.get(6)).hasText("80");
-    assertThat(links.get(7)).hasText("Next");
+  private void startServer(Configuration configuration) {
+    server = new WebServer().configure(configuration).start(PORT);
   }
 
   @Test
-  public void should_show_links_for_page_2() throws IOException {
-    server = new WebServer(PORT);
-    server.start();
+  public void should_show_links_for_page_1() {
+    startServer(new WebConfiguration());
 
-    indexPage.go();
-    indexPage.clickLinkForPage(2);
+    goTo("/");
 
-    FluentList<FluentWebElement> links = indexPage.links();
-    assertThat(links).hasSize(9);
-    assertThat(links.get(0)).hasText("Previous");
-    assertThat(links.get(1)).hasText("1");
-    assertThat(links.get(2)).hasText("2");
-    assertThat(links.get(3)).hasText("3");
-    assertThat(links.get(4)).hasText("4");
-    assertThat(links.get(5)).hasText("5");
-    assertThat(links.get(6)).hasText("...");
-    assertThat(links.get(7)).hasText("80");
-    assertThat(links.get(8)).hasText("Next");
+    find(".pagination a").should().haveSize(8);
+    find(".pagination li:nth-child(1) a").should().contain("1");
+    find(".pagination li:nth-child(2) a").should().contain("2");
+    find(".pagination li:nth-child(3) a").should().contain("3");
+    find(".pagination li:nth-child(4) a").should().contain("4");
+    find(".pagination li:nth-child(5) a").should().contain("5");
+    find(".pagination li:nth-child(6) a").should().contain("...");
+    find(".pagination li:nth-child(7) a").should().contain("80");
+    find(".pagination li:nth-child(8) a").should().contain("Next");
   }
 
   @Test
-  public void should_show_links_for_page_5() throws IOException {
-    server = new WebServer(PORT);
-    server.start();
+  public void should_show_links_for_page_2() {
+    startServer(new WebConfiguration());
 
-    indexPage.go();
-    indexPage.clickLinkForPage(5);
+    goTo("/");
+    find(".pagination a").withText("2").click();
 
-    FluentList<FluentWebElement> links = indexPage.links();
-    assertThat(links).hasSize(11);
-    assertThat(links.get(0)).hasText("Previous");
-    assertThat(links.get(1)).hasText("1");
-    assertThat(links.get(2)).hasText("...");
-    assertThat(links.get(3)).hasText("3");
-    assertThat(links.get(4)).hasText("4");
-    assertThat(links.get(5)).hasText("5");
-    assertThat(links.get(6)).hasText("6");
-    assertThat(links.get(7)).hasText("7");
-    assertThat(links.get(8)).hasText("...");
-    assertThat(links.get(9)).hasText("80");
-    assertThat(links.get(10)).hasText("Next");
+    find(".pagination a").should().haveSize(9);
+    find(".pagination li:nth-child(1) a").should().contain("Previous");
+    find(".pagination li:nth-child(2) a").should().contain("1");
+    find(".pagination li:nth-child(3) a").should().contain("2");
+    find(".pagination li:nth-child(4) a").should().contain("3");
+    find(".pagination li:nth-child(5) a").should().contain("4");
+    find(".pagination li:nth-child(6) a").should().contain("5");
+    find(".pagination li:nth-child(7) a").should().contain("...");
+    find(".pagination li:nth-child(8) a").should().contain("80");
+    find(".pagination li:nth-child(9) a").should().contain("Next");
   }
 
   @Test
-  public void should_show_links_for_page_80() throws IOException {
-    server = new WebServer(PORT);
-    server.start();
+  public void should_show_links_for_page_5() {
+    startServer(new WebConfiguration());
 
-    indexPage.go();
-    indexPage.clickLinkForPage(80);
+    goTo("/");
+    find(".pagination a").withText("5").click();
 
-    FluentList<FluentWebElement> links = indexPage.links();
-    assertThat(links).hasSize(8);
-    assertThat(links.get(0)).hasText("Previous");
-    assertThat(links.get(1)).hasText("1");
-    assertThat(links.get(2)).hasText("...");
-    assertThat(links.get(3)).hasText("76");
-    assertThat(links.get(4)).hasText("77");
-    assertThat(links.get(5)).hasText("78");
-    assertThat(links.get(6)).hasText("79");
-    assertThat(links.get(7)).hasText("80");
+    find(".pagination a").should().haveSize(11);
+    find(".pagination li:nth-child(1) a").should().contain("Previous");
+    find(".pagination li:nth-child(2) a").should().contain("1");
+    find(".pagination li:nth-child(3) a").should().contain("...");
+    find(".pagination li:nth-child(4) a").should().contain("3");
+    find(".pagination li:nth-child(5) a").should().contain("4");
+    find(".pagination li:nth-child(6) a").should().contain("5");
+    find(".pagination li:nth-child(7) a").should().contain("6");
+    find(".pagination li:nth-child(8) a").should().contain("7");
+    find(".pagination li:nth-child(9) a").should().contain("...");
+    find(".pagination li:nth-child(10) a").should().contain("80");
+    find(".pagination li:nth-child(11) a").should().contain("Next");
   }
 
   @Test
-  public void should_show_links_for_page_1_out_of_1() throws IOException {
-    server = new WebServer(PORT);
-    LinesDao linesDao = server.getLinesDao();
-    linesDao.insert(Arrays.asList("1"));
-    server.start();
+  public void should_show_links_for_page_80() {
+    startServer(new WebConfiguration());
 
-    indexPage.go();
+    goTo("/");
+    find(".pagination a").withText("80").click();
 
-    FluentList<FluentWebElement> links = indexPage.links();
-    assertThat(links).hasSize(1);
-    assertThat(links.get(0)).hasText("1");
+    find(".pagination a").should().haveSize(8);
+    find(".pagination li:nth-child(1) a").should().contain("Previous");
+    find(".pagination li:nth-child(2) a").should().contain("1");
+    find(".pagination li:nth-child(3) a").should().contain("...");
+    find(".pagination li:nth-child(4) a").should().contain("76");
+    find(".pagination li:nth-child(5) a").should().contain("77");
+    find(".pagination li:nth-child(6) a").should().contain("78");
+    find(".pagination li:nth-child(7) a").should().contain("79");
+    find(".pagination li:nth-child(8) a").should().contain("80");
   }
 
   @Test
-  public void should_show_links_for_page_2_out_of_2() throws IOException {
-    server = new WebServer(PORT);
-    server.getLinesDao().insert(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"));
-    server.start();
+  public void should_show_links_for_page_1_out_of_1() {
+    startServer(override(new WebConfiguration()).with(routes -> {
+      Singletons beans = new Singletons();
+      routes.setIocAdapter(beans);
 
-    indexPage.go();
-    indexPage.clickLinkForPage(2);
+      beans.get(LinesDao.class).insert(Arrays.asList("1"));
+    }));
 
-    FluentList<FluentWebElement> links = indexPage.links();
-    assertThat(links).hasSize(3);
-    assertThat(links.get(0)).hasText("Previous");
-    assertThat(links.get(1)).hasText("1");
-    assertThat(links.get(2)).hasText("2");
+    goTo("/");
+
+    find(".pagination a").should().haveSize(1);
+    find(".pagination li:nth-child(1) a").should().contain("1");
+  }
+
+  @Test
+  public void should_show_links_for_page_2_out_of_2() {
+    startServer(override(new WebConfiguration()).with(routes -> {
+      Singletons beans = new Singletons();
+      routes.setIocAdapter(beans);
+
+      beans.get(LinesDao.class).insert(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"));
+    }));
+
+    goTo("/");
+    find(".pagination a").withText("2").click();
+
+    find(".pagination a").should().haveSize(3);
+    find(".pagination li:nth-child(1) a").should().contain("Previous");
+    find(".pagination li:nth-child(2) a").should().contain("1");
+    find(".pagination li:nth-child(3) a").should().contain("2");
   }
 }

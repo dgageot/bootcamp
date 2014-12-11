@@ -1,20 +1,15 @@
 package com.retour1024.pagination;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.retour1024.model.LinesDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Singleton
 public class PageFactory {
   private static final int PER_PAGE = 10;
 
   private final LinesDao linesDao;
 
-  @Inject
   public PageFactory(LinesDao linesDao) {
     this.linesDao = linesDao;
   }
@@ -29,7 +24,7 @@ public class PageFactory {
   }
 
   private List<Link> links(int pageIndex) {
-    List<Link> links = Lists.newArrayList();
+    List<Link> links = new ArrayList<>();
 
     Pagination pagination = new Pagination(pageIndex, (linesDao.count() + PER_PAGE - 1) / PER_PAGE);
 
